@@ -20,7 +20,7 @@ const getBody = (req, callback) => {
   });
 };
 
-// here, you could declare one or more variables to store what comes back from the form.
+// Adding a comment
 let item = "Guess the number!";
 let randomNumber = Math.floor(Math.random() * 100 + 1);
 let hint = "Range is from 1 - 100";
@@ -70,5 +70,8 @@ const server = http.createServer((req, res) => {
   }
 });
 
+server.on("request", (req) => {
+  console.log("event received: ", req.method, req.url);
+});
 server.listen(3000);
 console.log("The server is listening on port 3000.");
