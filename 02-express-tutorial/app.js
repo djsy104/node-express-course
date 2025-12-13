@@ -30,7 +30,7 @@ app.get("/api/v1/query", (req, res) => {
   if (search) {
     if (type === "text") {
       sortedProducts = sortedProducts.filter((product) => {
-        return product.name.startsWith(search);
+        return product.name.includes(search);
       });
     } else if (type === "regex") {
       const regex = new RegExp(search, "i");
