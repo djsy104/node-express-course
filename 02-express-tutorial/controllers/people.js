@@ -1,10 +1,10 @@
 const { people } = require("../data");
 
-const addPerson = (req, res) => {
-  return res.json(people);
+const getPeople = (req, res) => {
+  return res.status(200).json({ success: true, people });
 };
 
-const getPeople = (req, res) => {
+const addPerson = (req, res) => {
   const { name } = req.body;
 
   if (!name) {
