@@ -2,7 +2,7 @@ const Product = require("../models/product");
 
 const getAllProductsStatic = async (req, res) => {
   const products = await Product.find({ price: { $gt: 30 } })
-    .sort("price]")
+    .sort("price")
     .select("name price");
   res.status(200).json({ products, nbHits: products.length });
 };
@@ -12,7 +12,7 @@ const getAllProducts = async (req, res) => {
   const queryObject = {};
 
   if (featured) {
-    queryObject.featured = featured === true ? true : false;
+    queryObject.featured = featured === "true" ? true : false;
   }
 
   if (company) {
@@ -32,18 +32,24 @@ const getAllProducts = async (req, res) => {
       "<=": "$lte",
     };
 
-    const regEx = /\b(>|>=|=|<|<=)\b/g;
+    const regEx = /\b(>=|<=|>|=|<)\b/g;
     let filters = numericFilters.replace(
       regEx,
       (match) => `-${operatorMap[match]}-`
     );
 
     const options = ["price", "rating"];
-    filters = filters.split(",").forEach((item) => {
+    filters.split(",").forEach((item) => {
       const [field, operator, value] = item.split("-");
-      if (options.includes(field)) {
-        queryObject[field] = { [operator]: Number(value) };
-      }
+      if (!options.includes(field)) return;
+
+      // Makes sure to not overwrite already pre-existing fields so that multiple fields can exist
+      if (!queryObject[field]) queryObject[field] = {};
+      queryObject[field][operator] = Number(value);
+
+      //   if (options.includes(field)) {
+      //     queryObject[field] = { [operator]: Number(value) };
+      //   }
     });
   }
 

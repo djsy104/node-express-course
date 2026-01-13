@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
-    defualt: 4.5,
+    default: 4.5,
   },
   createdAt: {
     type: Date,
